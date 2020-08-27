@@ -1,0 +1,39 @@
+{
+    "vertexs": [
+        {
+            "value": "Pepe",
+            "connections": {
+                "Lola": 12,
+                "Andres": 10
+            },
+            "location": {
+                "x": 12,
+                "y": 5
+            }
+        },
+        {
+            "value": "Lola",
+            "connections": {
+                "Pepe": 12
+            },
+            "location": {
+                "x": 2,
+                "y": 3
+            }
+        },
+        {
+            "value": "Andres",
+            "connections": {
+                "Pepe": 10
+            },
+            "location": {
+                "x": 20,
+                "y": 16
+            }
+        }
+    ],
+    "info": {
+        "radius": 30,
+        "color": "#000000"
+    }
+}
