@@ -19,11 +19,11 @@ public class DijkstraPoint<T, W> {
     }
 
     public Point getPoint() {
-        return origin.getPoint();
+        return origin;
     }
 
     public Point getConnPoint() {
-        return conection.conn.getPoint();
+        return conection.conn;
     }    
 
 }

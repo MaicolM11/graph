@@ -21,21 +21,21 @@ public class Controller implements MouseListener, ActionListener {
 
     public Controller() {
         this.graph = new Dijkstra<>((a, b) -> a.compareToIgnoreCase(b));
-        this.frame = new Principal<>(this);
+        this.frame = new Principal<>(this, graph.getGraph());
     }
 
     private void resetGraph() {
         if (JOptionPane.showConfirmDialog(null, "¿Está seguro de resetear?", "WARNING",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             this.graph.clear();
-            this.frame.updateAll(true, graph.getGraph(), "");
         }
     }
 
     private void deleteConn() {
         try {
-            boolean add = graph.deleteConnection();
-            frame.updateAll(add, graph.getGraph(), "La conexión no existe");
+            if(!graph.deleteConnection()){
+                JOptionPane.showMessageDialog(null, "La conexión no existe");
+            }
         } catch (NoSuchElementException ex) {
             JOptionPane.showMessageDialog(null, "Seleccione dos vertices");
         }
@@ -44,30 +44,31 @@ public class Controller implements MouseListener, ActionListener {
     private void addConn() {
         try {
             double weight = Double.parseDouble(JOptionPane.showInputDialog(null, "Inserte el peso"));
-            boolean add = graph.addConn(weight);
-            frame.updateAll(add, graph.getGraph(), "La conexión ya existe");
-        } catch (NullPointerException  | NumberFormatException e) {
+            if(!graph.addConn(weight)){
+                JOptionPane.showMessageDialog(null, "La conexión ya existe");
+            }
+        } catch (NullPointerException | NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Datos incorrectos o incompletos");
-        } catch (NoSuchElementException ex ){
-            JOptionPane.showMessageDialog(null, "Seleccione dos vertices");            
+        } catch (NoSuchElementException ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione dos vertices");
         }
     }
 
     private void addVertex(Point point) {
         try {
             String value = JOptionPane.showInputDialog("Valor").toString();
-            boolean add = this.graph.addAlone(value, point);
-            frame.updateAll(add, graph.getGraph(), "El nodo ya existe");
+            if (!graph.addAlone(value, point)) {
+                JOptionPane.showMessageDialog(null, "El nodo ya existe");
+            }
         } catch (NullPointerException ex) {
         }
     }
 
     private void evaluateClick(Point point) {
         Optional<Vertex<String, Double>> search = graph.getGraph().stream().filter(x -> x.searchCircle(point))
-                .findFirst();
+                .findAny();
         if (search.isPresent()) {
             graph.addSelect(search.get());
-            frame.updateAll(true, graph.getGraph(), "");
         } else {
             addVertex(point);
         }
@@ -78,7 +79,16 @@ public class Controller implements MouseListener, ActionListener {
         if (op.isPresent() && JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminarlo?", "WARNING",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             graph.deleteVertex(op.get().getValue());
-            frame.updateAll(true, graph.getGraph(), "");
+        }
+    }
+
+    private void runDijkstra() {
+        try {
+            graph.resetWay();
+            graph.init();
+            frame.paintDijktra(graph.getWay());
+        } catch (NoSuchElementException ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione dos nodos que esten conectados");
         }
     }
 
@@ -100,26 +110,17 @@ public class Controller implements MouseListener, ActionListener {
             default:
                 break;
         }
-        frame.updateAll(true, graph.getGraph(), "");
-    }
-
-    private void runDijkstra() {
-        try {
-            graph.resetWay();
-            graph.init();
-            frame.paintDijktra(graph.getWay());
-        } catch (NoSuchElementException ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione dos nodos que esten conectados");
-        } 
+        frame.repaint();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == 1) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
             evaluateClick(e.getPoint());
-        } else if (e.getButton() == 3) {
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
             deleteVertex(e.getPoint());
         }
+        frame.repaint();
     }
 
     @Override

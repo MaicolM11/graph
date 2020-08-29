@@ -8,6 +8,7 @@ import java.awt.Point;
 
 import com.uptc.models.VertexCoordenate;
 
+@SuppressWarnings("serial")
 public class Vertex<T, W> extends VertexCoordenate implements Comparable<Vertex<T, W>> {
 
     protected T value;
@@ -57,7 +58,7 @@ public class Vertex<T, W> extends VertexCoordenate implements Comparable<Vertex<
     public boolean isSelect() {
         return isSelect;
     }
-    
+
     @Override
     public int compareTo(Vertex<T, W> o) {
         return comp.compare(this.value, o.value);

@@ -34,7 +34,7 @@ public class Graph<T, W> {
     }
 
     // agregar conexiones, para la grafica
-    public boolean addConn(W weight) {
+    public boolean addConn(W weight) throws NoSuchElementException {
         List<Vertex<T, W>> values = getSelect();
         return addConn(values.get(0).value, values.get(1).value, weight);
     }
@@ -46,7 +46,7 @@ public class Graph<T, W> {
         return vertexB.get().deleteConnection(vA);
     }
 
-    public boolean deleteConnection() {
+    public boolean deleteConnection() throws NoSuchElementException {
         List<Vertex<T, W>> values = getSelect();
         return deleteConnection(values.get(0).value, values.get(1).value);
     }
@@ -99,7 +99,7 @@ public class Graph<T, W> {
         return graph;
     }
 
-    public void addSelect(Vertex<String, Double> vertex) {
+    public void addSelect(Vertex<T, W> vertex) {
         if (!vertex.isSelect) { // si lo va a marcar
             if (countSelect == 2) {
                 this.graph.forEach(x -> x.isSelect = false);

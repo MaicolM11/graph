@@ -50,10 +50,10 @@ public class OptionsView extends JPanel {
         reset.setFocusPainted(false);
         dijkstra.setFocusPainted(false);
 
-        addConn.setCursor(new Cursor(Cursor. HAND_CURSOR));
-        deleteConn.setCursor(new Cursor(Cursor. HAND_CURSOR));
-        reset.setCursor(new Cursor(Cursor. HAND_CURSOR));
-        dijkstra.setCursor(new Cursor(Cursor. HAND_CURSOR));
+        addConn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteConn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        reset.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        dijkstra.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         addConn.setIcon(new ImageIcon(getClass().getResource("/add.png")));
         deleteConn.setIcon(new ImageIcon(getClass().getResource("/delete.png")));
@@ -81,5 +81,5 @@ public class OptionsView extends JPanel {
         this.dijkstra.setActionCommand(Options.DIJKSTRA.name());
 
     }
-    
+
 }

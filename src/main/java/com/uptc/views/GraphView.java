@@ -7,9 +7,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.uptc.controllers.Controller;
@@ -26,9 +24,9 @@ public class GraphView<T, W> extends JPanel implements MouseMotionListener {
     private Point point_move;
     private Drawing<T, W> drawing;
 
-    public GraphView(Principal<T, W> prin) {
+    public GraphView(Principal<T, W> prin,Set<Vertex<T, W>> graph) {
         this.frameP = prin;
-        this.graph = new TreeSet<>();
+        this.graph = graph;
         this.drawing = new Drawing<>();
         this.point_move = new Point();
         this.wayDijkstra = new ArrayList<>();
@@ -40,14 +38,7 @@ public class GraphView<T, W> extends JPanel implements MouseMotionListener {
         this.setDoubleBuffered(true);
     }
 
-    public void updateAll(boolean success, Set<Vertex<T, W>> graph, String message) {
-        if (success) {
-            this.graph = graph;
-            frameP.repaint();
-        } else {
-            JOptionPane.showMessageDialog(null, message);
-        }
-    }
+    
 
     @Override
     public void paintComponent(Graphics g) {
@@ -55,8 +46,8 @@ public class GraphView<T, W> extends JPanel implements MouseMotionListener {
         g.setFont(Constants.FORMAT_LETTER);
 
         graph.forEach(x -> x.getConnections().forEach(
-                x1 -> drawing.paintLine(g, x.getPoint(), x1.getVertex().getPoint(), x1.getWeight().toString())));
-        graph.forEach(x -> drawing.paintCircle(g, x.getPoint(), x.getValue().toString(),
+                x1 -> drawing.paintLine(g, x, x1.getVertex(), x1.getWeight().toString())));
+        graph.forEach(x -> drawing.paintCircle(g, x , x.getValue().toString(),
                 x.isSelect() ? Constants.COLOR_SELECT : Constants.COLOR_VERTEX));
         drawing.paintDijkstra(g, wayDijkstra);
         wayDijkstra.clear();

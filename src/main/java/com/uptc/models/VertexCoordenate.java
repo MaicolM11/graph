@@ -2,31 +2,28 @@ package com.uptc.models;
 
 import java.awt.Point;
 
-public class VertexCoordenate {
+import com.uptc.views.Constants;
 
-    public static final int RADIUS = 30;
+@SuppressWarnings("serial")
+public class VertexCoordenate extends Point {
 
-    private Point point;
+    private static final int RADIUS = Constants.RADIUS;
 
     public VertexCoordenate(int x, int y) {
-        point = new Point(x, y);
+        super(x, y);
     }
 
     public VertexCoordenate() {
-        point = new Point(RADIUS, RADIUS);
+        super(RADIUS, RADIUS);
     }
 
     public void translate(int dx, int dy) {
-        this.point.x += dx;
-        this.point.y += dy;
+        this.x += dx;
+        this.y += dy;
     }
 
     public boolean searchCircle(Point d) {
-        return d.distance(point) <= RADIUS / 2;
-    }
-
-    public Point getPoint() {
-        return this.point;
+        return d.distance(this) <= RADIUS / 2;
     }
 
 }

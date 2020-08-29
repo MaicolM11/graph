@@ -8,13 +8,11 @@ import java.awt.Graphics2D;
 
 import java.util.List;
 
-import com.uptc.models.VertexCoordenate;
 import com.uptc.strucs.DijkstraPoint;
 
 public class Drawing<T, W> {
 
-    private static final int RADIUS = VertexCoordenate.RADIUS;
-
+    private static final int RADIUS = Constants.RADIUS;
 
     public void paintLine(Graphics g, Point initial_c, Point final_c, String distance) {
         g.setColor(Constants.COLOR_LINE);
@@ -31,7 +29,7 @@ public class Drawing<T, W> {
 
     public void paintDijkstra(Graphics g, List<DijkstraPoint<T, W>> values) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setStroke(new BasicStroke(3));
+        g2.setStroke(new BasicStroke(2));
         g2.setColor(Constants.COLOR_DIJKSTRA);
         values.forEach(x -> {
             Point initial_c = x.getPoint();

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class Dijkstra<T, W> extends Graph<T, W>  {
+public class Dijkstra<T, W> extends Graph<T, W> {
 
     private final List<DijkstraPoint<T, W>> listProcess;
     private final List<DijkstraPoint<T, W>> listFinal;
@@ -25,7 +25,6 @@ public class Dijkstra<T, W> extends Graph<T, W>  {
         this.search(final_v).get();
         this.final_v = final_v;
         this.inicial_v = init_v;
-
         travel(init, 0);
     }
 
@@ -34,7 +33,7 @@ public class Dijkstra<T, W> extends Graph<T, W>  {
         init(values.get(0).getValue(), values.get(1).getValue());
     }
 
-    private void travel(Vertex<T, W> vertex_actual, double distance) {
+    private void travel(Vertex<T, W> vertex_actual, double distance) throws NoSuchElementException {
         /*
          * if (comp.compare(vertex_actual.value, final_v) != 0) { vertex_actual.isTravel
          * = true; addAdyacents(vertex_actual, distance);
@@ -44,14 +43,14 @@ public class Dijkstra<T, W> extends Graph<T, W>  {
          * listFinal.add(minimumNode); travel(minimumNode.conection.conn,
          * minimumNode.distance); } else { throw new NoSuchElementException(); } }
          */
-        while (comp.compare(vertex_actual.value, final_v) != 0) {
-            vertex_actual.isTravel = true;
-            addAdyacents(vertex_actual, distance);
-            
-            DijkstraPoint<T, W> minimumNode = findMinimum();
-            listProcess.remove(searchConn(minimumNode).get());
+        while (comp.compare(vertex_actual.value, final_v) != 0) {  // ciclo < complejidad que recursividad ->  + rápido
+            vertex_actual.isTravel = true;              // marca el vertice
+            addAdyacents(vertex_actual, distance);      // agrega los vertices adyacentes
+
+            DijkstraPoint<T, W> minimumNode = findMinimum();        //encuentra el punto con menor distancia
+            listProcess.remove(searchConn(minimumNode).get());      // lo elimina y repite proceso
             listFinal.add(minimumNode);
-            
+
             vertex_actual = minimumNode.conection.conn;
             distance = minimumNode.distance;
         }
@@ -118,7 +117,7 @@ public class Dijkstra<T, W> extends Graph<T, W>  {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        listFinal.forEach(x -> builder.append(String.format("Desde %s, destino %s, distancia %s \n", x.origin.value,
+        verification().forEach(x -> builder.append(String.format("Desde %s, destino %s, distancia %s \n", x.origin.value,
                 x.conection.conn.value, x.distance)));
         return builder.toString();
     }

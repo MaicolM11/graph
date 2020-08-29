@@ -19,7 +19,7 @@ public class Principal<T, W> extends JFrame {
 
     private GraphView<T, W> graphView;
 
-    public Principal(Controller ctrl) {
+    public Principal(Controller ctrl, Set<Vertex<T, W>> graph) {
         super();
         this.setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
         this.setTitle("Dijkstra Software");
@@ -27,16 +27,12 @@ public class Principal<T, W> extends JFrame {
         this.setBounds(0, 0, 800, 500);
         this.setLocationRelativeTo(null);
         this.setBackground(Color.WHITE);
-        graphView = new GraphView<>(this);
+        graphView = new GraphView<>(this, graph);
         add(graphView, BorderLayout.CENTER);
         add(new OptionsView(ctrl), BorderLayout.SOUTH);
         graphView.init(ctrl);
 
         this.setVisible(true);
-    }
-
-    public void updateAll(boolean success, Set<Vertex<T, W>> graph, String message) {
-        graphView.updateAll(success, graph, message);
     }
 
     public void paintDijktra(List<DijkstraPoint<T, W>> values) {
