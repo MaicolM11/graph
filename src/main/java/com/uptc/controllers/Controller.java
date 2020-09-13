@@ -1,7 +1,8 @@
 package com.uptc.controllers;
 
-import com.uptc.strucs.Dijkstra;
+import com.uptc.strucs.DijkstraV2;
 import com.uptc.strucs.Vertex;
+import com.uptc.utils.GraphFiles;
 import com.uptc.views.Principal;
 
 import java.awt.Point;
@@ -9,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -16,11 +19,11 @@ import javax.swing.JOptionPane;
 
 public class Controller implements MouseListener, ActionListener {
 
-    private final Dijkstra<String, Double> graph;
+    private final DijkstraV2<String, Double> graph;
     private final Principal<String, Double> frame;
 
     public Controller() {
-        this.graph = new Dijkstra<>((a, b) -> a.compareToIgnoreCase(b));
+        this.graph = new DijkstraV2<>((a, b) -> a.compareToIgnoreCase(b));
         this.frame = new Principal<>(this, graph.getGraph());
     }
 
@@ -33,7 +36,7 @@ public class Controller implements MouseListener, ActionListener {
 
     private void deleteConn() {
         try {
-            if(!graph.deleteConnection()){
+            if (!graph.deleteConnection()) {
                 JOptionPane.showMessageDialog(null, "La conexión no existe");
             }
         } catch (NoSuchElementException ex) {
@@ -44,7 +47,7 @@ public class Controller implements MouseListener, ActionListener {
     private void addConn() {
         try {
             double weight = Double.parseDouble(JOptionPane.showInputDialog(null, "Inserte el peso"));
-            if(!graph.addConn(weight)){
+            if (!graph.addConn(weight)) {
                 JOptionPane.showMessageDialog(null, "La conexión ya existe");
             }
         } catch (NullPointerException | NumberFormatException e) {
@@ -56,7 +59,7 @@ public class Controller implements MouseListener, ActionListener {
 
     private void addVertex(Point point) {
         try {
-            String value = JOptionPane.showInputDialog("Valor").toString();
+            String value = JOptionPane.showInputDialog("Inserte la etiqueta del nodo").toString();
             if (!graph.addAlone(value, point)) {
                 JOptionPane.showMessageDialog(null, "El nodo ya existe");
             }
@@ -84,12 +87,47 @@ public class Controller implements MouseListener, ActionListener {
 
     private void runDijkstra() {
         try {
-            graph.resetWay();
             graph.init();
-            frame.paintDijktra(graph.getWay());
+            showWays(graph.getWays()).start();
+            JOptionPane.showMessageDialog(null, graph.getWaysString());
         } catch (NoSuchElementException ex) {
+            JOptionPane.showMessageDialog(null, "Seleccione dos nodos");
+        } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Seleccione dos nodos que esten conectados");
+        } 
+        graph.resetWay();
+    }
+
+    private Thread showWays(List<List<Vertex<String, Double>>> ways) {
+        return new Thread(new Runnable() {
+            public void run() {
+                ways.forEach(x -> {
+                    try {
+                        frame.paintDijktra(x);
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                    }
+                });
+            }
+        });
+    }
+
+    private void openFile() {
+        try {
+            this.graph.clear();
+            GraphFiles.readFile(frame.getPathOpen(), graph);
+        } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Seleccione un archivo valido");
         }
+    }
+
+    private void saveFile() {
+        try {
+            GraphFiles.writeFile(frame.getPathSave(), graph);
+            JOptionPane.showMessageDialog(null, "Documento guardado con exito");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al guardar el archivo");
+        } 
     }
 
     @Override
@@ -106,6 +144,12 @@ public class Controller implements MouseListener, ActionListener {
                 break;
             case DIJKSTRA:
                 runDijkstra();
+                break;
+            case SAVE_FILE:
+                saveFile();
+                break;
+            case OPEN_FILE:
+                openFile();
                 break;
             default:
                 break;

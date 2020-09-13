@@ -59,9 +59,28 @@ public class Vertex<T, W> extends VertexCoordenate implements Comparable<Vertex<
         return isSelect;
     }
 
+    protected boolean isTravel() {
+        return isSelect;
+    }
+
     @Override
     public int compareTo(Vertex<T, W> o) {
         return comp.compare(this.value, o.value);
     }
 
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @SuppressWarnings("unchecked") 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj==null || !(obj instanceof Vertex))
+            return false;
+        Vertex<T,W> other = (Vertex<T,W>) obj;
+        return this.compareTo(other)==0;
+    }
+
+    
 }

@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import com.uptc.controllers.Controller;
-import com.uptc.strucs.DijkstraPoint;
 import com.uptc.strucs.Vertex;
 
 @SuppressWarnings("serial")
@@ -19,10 +18,11 @@ public class GraphView<T, W> extends JPanel implements MouseMotionListener {
 
     private Principal<T, W> frameP;
     private Set<Vertex<T, W>> graph;
-    private List<DijkstraPoint<T, W>> wayDijkstra;
+    private List<Vertex<T, W>> wayDijkstra;
+    private Drawing<T, W> drawing;
+
     private Vertex<T, W> circle_move;
     private Point point_move;
-    private Drawing<T, W> drawing;
 
     public GraphView(Principal<T, W> prin,Set<Vertex<T, W>> graph) {
         this.frameP = prin;
@@ -38,7 +38,10 @@ public class GraphView<T, W> extends JPanel implements MouseMotionListener {
         this.setDoubleBuffered(true);
     }
 
-    
+    public void paintDijktra(List<Vertex<T, W>> values) {
+        this.wayDijkstra = values;
+        frameP.repaint();
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -67,11 +70,6 @@ public class GraphView<T, W> extends JPanel implements MouseMotionListener {
     @Override
     public void mouseMoved(MouseEvent e) {
         circle_move = null;
-    }
-
-    public void paintDijktra(List<DijkstraPoint<T, W>> values) {
-        this.wayDijkstra = values;
-        frameP.repaint();
     }
 
 }

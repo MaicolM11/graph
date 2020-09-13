@@ -13,7 +13,7 @@ import java.awt.Point;
 
 public class Graph<T, W> {
 
-    private Set<Vertex<T, W>> graph;
+    protected Set<Vertex<T, W>> graph;
     protected final Comparator<T> comp;
     private int countSelect;
 
@@ -52,7 +52,12 @@ public class Graph<T, W> {
     }
 
     public void clear() {
+        this.countSelect =0;
         this.graph.clear();
+    }
+
+    protected void resetSelect(){
+        this.graph.stream().filter(v-> v.isTravel).forEach(x -> x.isTravel = false);
     }
 
     protected Optional<Vertex<T, W>> search(T valueSearch) {

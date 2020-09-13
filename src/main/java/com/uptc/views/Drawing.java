@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 
 import java.util.List;
 
-import com.uptc.strucs.DijkstraPoint;
+import com.uptc.strucs.Vertex;
 
 public class Drawing<T, W> {
 
@@ -27,17 +27,18 @@ public class Drawing<T, W> {
         g.drawString(title, point.x - (RADIUS / 2), point.y - (RADIUS / 2));
     }
 
-    public void paintDijkstra(Graphics g, List<DijkstraPoint<T, W>> values) {
+    public void paintDijkstra(Graphics g, List<Vertex<T, W>> wayDijkstra) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(2));
         g2.setColor(Constants.COLOR_DIJKSTRA);
-        values.forEach(x -> {
-            Point initial_c = x.getPoint();
-            Point final_c = x.getConnPoint();
+
+        for(int i = 0; i<wayDijkstra.size()-1; i++){
+            Point initial_c = wayDijkstra.get(i).getLocation();
+            Point final_c = wayDijkstra.get(i+1).getLocation();
             g2.drawLine(initial_c.x, initial_c.y, final_c.x, final_c.y);
             paintCircle(g, initial_c, "", Constants.COLOR_DIJKSTRA);
             paintCircle(g, final_c, "", Constants.COLOR_DIJKSTRA);
-        });
+        }
 
     }
 }

@@ -4,7 +4,7 @@ public class DijkstraTest {
 
     public static void main(String[] args) {
 
-        Dijkstra<String, Double> graph = new Dijkstra<>((a, b) -> a.compareTo(b));
+        DijkstraV2<String, Double> graph = new DijkstraV2<>((a, b) -> a.compareTo(b));
         graph.addConn("a", "b", 4.0);
         graph.addConn("c", "a", 2.0);
         graph.addConn("b", "d", 5.0);
