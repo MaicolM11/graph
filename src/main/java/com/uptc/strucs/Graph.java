@@ -100,6 +100,10 @@ public class Graph<T, W> {
         throw new NoSuchElementException();
     }
 
+    public Optional<Vertex<T, W>> searchVertex(Point p) {
+        return graph.stream().filter(x -> x.searchCircle(p)).findAny();
+    }
+
     public Set<Vertex<T, W>> getGraph() {
         return graph;
     }

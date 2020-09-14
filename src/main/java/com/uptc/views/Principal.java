@@ -2,6 +2,7 @@ package com.uptc.views;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -44,9 +45,9 @@ public class Principal<T, W> extends JFrame {
     private void initUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            UIManager.put("Button.foreground", Color.BLACK);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                | UnsupportedLookAndFeelException e) { }
+                | UnsupportedLookAndFeelException e) {
+        }
     }
 
     public String getPathOpen() throws FileNotFoundException {
@@ -56,4 +57,18 @@ public class Principal<T, W> extends JFrame {
     public String getPathSave() throws FileNotFoundException {
         return fileChooser.getPathSave();
     }
+
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
+
+    public boolean confirm(String message) {
+        return JOptionPane.showConfirmDialog(null, message, "WARNING",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+    }
+
+    public String getInput(String message) {
+        return JOptionPane.showInputDialog(this, message);
+    }
+
 }

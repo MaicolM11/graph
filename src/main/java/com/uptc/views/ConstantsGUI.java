@@ -3,7 +3,7 @@ package com.uptc.views;
 import java.awt.Color;
 import java.awt.Font;
 
-public class Constants {
+public class ConstantsGUI {
 
     public static final Color COLOR_LINE = Color.BLACK;
     public static final Color COLOR_WEIGHT = Color.RED;

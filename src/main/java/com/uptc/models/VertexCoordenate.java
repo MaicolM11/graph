@@ -2,12 +2,12 @@ package com.uptc.models;
 
 import java.awt.Point;
 
-import com.uptc.views.Constants;
+import com.uptc.views.ConstantsGUI;
 
 @SuppressWarnings("serial")
 public class VertexCoordenate extends Point {
 
-    private static final int RADIUS = Constants.RADIUS;
+    private static final int RADIUS = ConstantsGUI.RADIUS;
 
     public VertexCoordenate(int x, int y) {
         super(x, y);

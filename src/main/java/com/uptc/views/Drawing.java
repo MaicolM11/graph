@@ -12,12 +12,12 @@ import com.uptc.strucs.Vertex;
 
 public class Drawing<T, W> {
 
-    private static final int RADIUS = Constants.RADIUS;
+    private static final int RADIUS = ConstantsGUI.RADIUS;
 
     public void paintLine(Graphics g, Point initial_c, Point final_c, String distance) {
-        g.setColor(Constants.COLOR_LINE);
+        g.setColor(ConstantsGUI.COLOR_LINE);
         g.drawLine(initial_c.x, initial_c.y, final_c.x, final_c.y);
-        g.setColor(Constants.COLOR_WEIGHT);
+        g.setColor(ConstantsGUI.COLOR_WEIGHT);
         g.drawString(distance, ((initial_c.x + final_c.x) / 2) - 5, ((initial_c.y + final_c.y) / 2) + 5);
     }
 
@@ -30,14 +30,14 @@ public class Drawing<T, W> {
     public void paintDijkstra(Graphics g, List<Vertex<T, W>> wayDijkstra) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(2));
-        g2.setColor(Constants.COLOR_DIJKSTRA);
+        g2.setColor(ConstantsGUI.COLOR_DIJKSTRA);
 
         for(int i = 0; i<wayDijkstra.size()-1; i++){
             Point initial_c = wayDijkstra.get(i).getLocation();
             Point final_c = wayDijkstra.get(i+1).getLocation();
             g2.drawLine(initial_c.x, initial_c.y, final_c.x, final_c.y);
-            paintCircle(g, initial_c, "", Constants.COLOR_DIJKSTRA);
-            paintCircle(g, final_c, "", Constants.COLOR_DIJKSTRA);
+            paintCircle(g, initial_c, "", ConstantsGUI.COLOR_DIJKSTRA);
+            paintCircle(g, final_c, "", ConstantsGUI.COLOR_DIJKSTRA);
         }
 
     }

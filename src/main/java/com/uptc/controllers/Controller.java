@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import javax.swing.JOptionPane;
-
 public class Controller implements MouseListener, ActionListener {
 
     private final DijkstraV2<String, Double> graph;
@@ -28,8 +26,7 @@ public class Controller implements MouseListener, ActionListener {
     }
 
     private void resetGraph() {
-        if (JOptionPane.showConfirmDialog(null, "¿Está seguro de resetear?", "WARNING",
-                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (frame.confirm("¿Está seguro de resetear?")) {
             this.graph.clear();
         }
     }
@@ -37,50 +34,39 @@ public class Controller implements MouseListener, ActionListener {
     private void deleteConn() {
         try {
             if (!graph.deleteConnection()) {
-                JOptionPane.showMessageDialog(null, "La conexión no existe");
+                frame.showMessage("La conexión no existe");
             }
         } catch (NoSuchElementException ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione dos vertices");
+            frame.showMessage("Seleccione dos vertices");
         }
     }
 
     private void addConn() {
         try {
-            double weight = Double.parseDouble(JOptionPane.showInputDialog(null, "Inserte el peso"));
+            double weight = Double.parseDouble(frame.getInput("Inserte el peso"));
             if (!graph.addConn(weight)) {
-                JOptionPane.showMessageDialog(null, "La conexión ya existe");
+                frame.showMessage("La conexión ya existe");
             }
         } catch (NullPointerException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Datos incorrectos o incompletos");
+            frame.showMessage("Datos incorrectos o incompletos");
         } catch (NoSuchElementException ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione dos vertices");
+            frame.showMessage("Seleccione dos vertices");
         }
     }
 
     private void addVertex(Point point) {
         try {
-            String value = JOptionPane.showInputDialog("Inserte la etiqueta del nodo").toString();
+            String value = frame.getInput("Inserte la etiqueta del nodo").toString();
             if (!graph.addAlone(value, point)) {
-                JOptionPane.showMessageDialog(null, "El nodo ya existe");
+                frame.showMessage("El nodo ya existe");
             }
         } catch (NullPointerException ex) {
         }
     }
 
-    private void evaluateClick(Point point) {
-        Optional<Vertex<String, Double>> search = graph.getGraph().stream().filter(x -> x.searchCircle(point))
-                .findAny();
-        if (search.isPresent()) {
-            graph.addSelect(search.get());
-        } else {
-            addVertex(point);
-        }
-    }
-
     private void deleteVertex(Point point) {
-        Optional<Vertex<String, Double>> op = graph.getGraph().stream().filter(x -> x.searchCircle(point)).findAny();
-        if (op.isPresent() && JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminarlo?", "WARNING",
-                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        Optional<Vertex<String, Double>> op = graph.searchVertex(point);
+        if (op.isPresent() && frame.confirm("¿Está seguro de eliminarlo?")) {
             graph.deleteVertex(op.get().getValue());
         }
     }
@@ -89,12 +75,12 @@ public class Controller implements MouseListener, ActionListener {
         try {
             graph.init();
             showWays(graph.getWays()).start();
-            JOptionPane.showMessageDialog(null, graph.getWaysString());
+            frame.showMessage(graph.getWaysString());
         } catch (NoSuchElementException ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione dos nodos");
+            frame.showMessage("Seleccione dos nodos");
         } catch (NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Seleccione dos nodos que esten conectados");
-        } 
+            frame.showMessage("Seleccione dos nodos que esten conectados");
+        }
         graph.resetWay();
     }
 
@@ -117,17 +103,17 @@ public class Controller implements MouseListener, ActionListener {
             this.graph.clear();
             GraphFiles.readFile(frame.getPathOpen(), graph);
         } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Seleccione un archivo valido");
+            frame.showMessage("Seleccione un archivo valido");
         }
     }
 
     private void saveFile() {
         try {
             GraphFiles.writeFile(frame.getPathSave(), graph);
-            JOptionPane.showMessageDialog(null, "Documento guardado con exito");
+            frame.showMessage("Documento guardado con exito");
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al guardar el archivo");
-        } 
+            frame.showMessage("Error al guardar el archivo");
+        }
     }
 
     @Override
@@ -160,7 +146,12 @@ public class Controller implements MouseListener, ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
-            evaluateClick(e.getPoint());
+            Optional<Vertex<String, Double>> search = graph.searchVertex(e.getPoint());
+            if (search.isPresent()) {
+                graph.addSelect(search.get());
+            } else {
+                addVertex(e.getPoint());
+            }
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             deleteVertex(e.getPoint());
         }
@@ -168,19 +159,15 @@ public class Controller implements MouseListener, ActionListener {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-    }
+    public void mousePressed(MouseEvent e) { }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-    }
+    public void mouseReleased(MouseEvent e) { }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-    }
+    public void mouseEntered(MouseEvent e) { }
 
     @Override
-    public void mouseExited(MouseEvent e) {
-    }
+    public void mouseExited(MouseEvent e) { }
 
 }

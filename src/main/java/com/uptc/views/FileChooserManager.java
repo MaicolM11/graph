@@ -16,9 +16,7 @@ public class FileChooserManager extends JDialog {
         super();
         this.fileChooser = new JFileChooser();
         this.setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Txt files", "txt");
-        fileChooser.setFileFilter(filter);
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Txt files", "txt"));
     }    
 
     public String getPathSave() throws FileNotFoundException {
